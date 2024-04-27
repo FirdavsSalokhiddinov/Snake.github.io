@@ -24,8 +24,29 @@ const updateFoodPosition = () => {
 const handleGameOver = () => {
     // Clearing the timer and reloading the page on game over
     clearInterval(setIntervalId);
-    alert("Game Over! Press OK to replay...");
-    location.reload();
+    
+    // Displaying "You Lose" text and restart button
+    const gameOverDiv = document.createElement('div');
+    gameOverDiv.style.position = 'absolute';
+    gameOverDiv.style.top = '50%';
+    gameOverDiv.style.left = '50%';
+    gameOverDiv.style.transform = 'translate(-50%, -50%)';
+    gameOverDiv.style.textAlign = 'center';
+    gameOverDiv.style.color = 'red';
+    gameOverDiv.style.fontSize = '3rem';
+    gameOverDiv.innerText = 'You Lose';
+    
+    const restartButton = document.createElement('button');
+    restartButton.innerText = 'Restart';
+    restartButton.style.fontSize = '1.5rem';
+    restartButton.style.padding = '10px 20px';
+    restartButton.style.marginTop = '20px';
+    restartButton.style.cursor = 'pointer';
+    restartButton.style.background = 'red';
+    restartButton.onclick = () => location.reload(); // Reloads the page when clicked
+    
+    gameOverDiv.appendChild(restartButton);
+    document.body.appendChild(gameOverDiv);
 }
 
 const changeDirection = e => {
@@ -50,7 +71,7 @@ controls.forEach(button => button.addEventListener("click", () => changeDirectio
 
 const initGame = () => {
     if(gameOver) return handleGameOver();
-    let html = `<div class="food" style="grid-area: ${foodY} / ${foodX}"></div>`;
+    let html = `<div class="food" style="grid-area: ${foodY} / ${foodX}; border-radius: 50%;"></div>`;
 
     // Checking if the snake hit the food
     if(snakeX === foodX && snakeY === foodY) {
@@ -61,6 +82,9 @@ const initGame = () => {
         localStorage.setItem("high-score", highScore);
         scoreElement.innerText = `Score: ${score}`;
         highScoreElement.innerText = `High Score: ${highScore}`;
+
+        const audio = new Audio('food.mp3');
+        audio.play();
     }
     // Updating the snake's head position based on the current velocity
     snakeX += velocityX;
@@ -74,12 +98,24 @@ const initGame = () => {
 
     // Checking if the snake's head is out of wall, if so setting gameOver to true
     if(snakeX <= 0 || snakeX > 30 || snakeY <= 0 || snakeY > 30) {
+        const audio = new Audio('gameover.mp3');
+        audio.play();
         return gameOver = true;
+        
     }
 
     for (let i = 0; i < snakeBody.length; i++) {
         // Adding a div for each part of the snake's body
-        html += `<div class="head" style="grid-area: ${snakeBody[i][1]} / ${snakeBody[i][0]}"></div>`;
+        if (i === 0) {
+            // If it's the snake's head, add eyes
+            html += `<div class="head" style="grid-area: ${snakeBody[i][1]} / ${snakeBody[i][0]}; border-radius: 50%; position: relative;">`;
+            html += `<div class="eye" style="position: absolute; top: 25%; left: 25%; width: 20%; height: 20%; background: black; border-radius: 50%;"></div>`;
+            html += `<div class="eye" style="position: absolute; top: 25%; right: 25%; width: 20%; height: 20%; background: black; border-radius: 50%;"></div>`;
+            html += `</div>`;
+        } else {
+            html += `<div class="head" style="grid-area: ${snakeBody[i][1]} / ${snakeBody[i][0]}; border-radius: 50%;"></div>`;
+        }
+
         // Checking if the snake head hit the body, if so set gameOver to true
         if (i !== 0 && snakeBody[0][1] === snakeBody[i][1] && snakeBody[0][0] === snakeBody[i][0]) {
             gameOver = true;
