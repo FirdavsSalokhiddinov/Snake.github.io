@@ -56,11 +56,11 @@ body {
 .controls div {
   display: none;
   justify-content: space-between; /* Add space between left and right arrows */
-  width: 150px; /* Adjust width to control the gap */
+  width: 200px;
 }
 
 .controls i {
-  padding: 15px;
+  padding: 20px;
   font-size: 1.3rem;
   color: #B8C6DC;
   cursor: pointer;
@@ -81,7 +81,7 @@ body {
   }
   .controls div{display: flex;}
   .controls i {
-    padding: 15px 0;
+    padding: 20px;
     font-size: 1rem;
   }
 }
