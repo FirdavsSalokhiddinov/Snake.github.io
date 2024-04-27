@@ -48,16 +48,22 @@ body {
 
 .controls {
   display: none;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
 }
+
+.controls div {
+  display: none;
+  justify-content: space-between; /* Add space between left and right arrows */
+  width: 150px; /* Adjust width to control the gap */
+}
+
 .controls i {
-  padding: 25px 0;
-  text-align: center;
+  padding: 15px;
   font-size: 1.3rem;
   color: #B8C6DC;
-  width: calc(100% / 4);
   cursor: pointer;
-  border-right: 1px solid #171B26;
 }
 
 @media screen and (max-width: 800px) {
@@ -71,7 +77,9 @@ body {
   }
   .controls {
     display: flex;
+    flex-direction: column;
   }
+  .controls div{display: flex;}
   .controls i {
     padding: 15px 0;
     font-size: 1rem;
